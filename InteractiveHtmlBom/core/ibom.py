@@ -66,12 +66,6 @@ def skip_component(m, config):
     if config.blacklist_virtual and m.attr == 'Virtual':
         return True
 
-    # skip components with dnp field not empty
-    if config.dnp_field \
-            and config.dnp_field in m.extra_fields \
-            and m.extra_fields[config.dnp_field]:
-        return True
-
     # skip components with wrong variant field
     empty_str = '<empty>'
     if config.board_variant_field and config.board_variant_whitelist:
@@ -126,10 +120,15 @@ def generate_bom(pcb_footprints, config):
             skipped_components.append(i)
             continue
 
+        # skip components with dnp field not empty but still add it to bom table
+        if config.dnp_field \
+            and config.dnp_field in f.extra_fields \
+            and f.extra_fields[config.dnp_field]:
+            skipped_components.append(i)
+
         # group part refs by value and footprint
         fields = []
         group_key = []
-
         for field in config.show_fields:
             if field == "Value":
                 fields.append(f.val)

@@ -36,7 +36,8 @@ class XmlParser(ParserBase):
                 ref_fields[name] = self.get_text(f.childNodes)
             for f in c.getElementsByTagName('property'):
                 if f.attributes['name'].value == 'dnp':
-                    field_set.add('kicad_dnp')
-                    ref_fields['kicad_dnp'] = "DNP"
+                    field_set.add('DNP')
+                    ref_fields['DNP'] = 'DNP'
+                    break
 
         return list(field_set), comp_dict
